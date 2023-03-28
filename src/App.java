@@ -28,11 +28,14 @@ public class App {
         // System.out.println(listaDeFilmes.size());
         Integer posicao = 1;
 
+        
+
         for (Map<String,String> filme : listaDeFilmes) {
             // System.out.println(posicao);
-            System.out.println(posicao+". "+filme.get("title"));
-            System.out.println(filme.get("image"));
-            System.out.println(filme.get("imDbRating"));
+
+            System.out.println("\u001b[34;1m \u001b[1m"+posicao+". "+filme.get("title")+"\u001b[m  * "+filme.get("imDbRating"));
+            System.out.println("\u001b[3m "+filme.get("image")+"\u001b[m");
+            // System.out.println();
             System.out.println();
             posicao++;
         }
