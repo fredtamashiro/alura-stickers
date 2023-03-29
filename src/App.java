@@ -1,4 +1,6 @@
+import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -28,12 +30,16 @@ public class App {
         // System.out.println(listaDeFilmes.size());
         Integer posicao = 1;
 
-        
+        String estrela = "⭐";
 
         for (Map<String,String> filme : listaDeFilmes) {
             // System.out.println(posicao);
+            String imagemUrl = filme.get("image");
+            InputStream inputStream = new URL(imagemUrl).openStream();
+            var gerador = new GeradorDeSticker();
+            gerador.criar(inputStream,filme.get("title"));
 
-            System.out.println("\u001b[34;1m \u001b[1m"+posicao+". "+filme.get("title")+"\u001b[m  * "+filme.get("imDbRating"));
+            System.out.println("\u001b[34;1m \u001b[1m"+posicao+". "+filme.get("title")+"\u001b[m "+estrela+" "+filme.get("imDbRating"));
             System.out.println("\u001b[3m "+filme.get("image")+"\u001b[m");
             // System.out.println();
             System.out.println();
