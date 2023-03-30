@@ -52,6 +52,7 @@ public class GeradorDeSticker {
 
         // gravar em arquivo
         LocalDateTime tempo = LocalDateTime.now();
+        nomeArquivo = nomeArquivo.replaceAll("[^a-zA-Z0-9]", "-");
         String HoraMinutoSegundo = tempo.getHour()+"h"+tempo.getMinute()+"m"+tempo.getSecond()+"s";
         ImageIO.write(novaImagem, "png", new File("saida/"+nomeArquivo+"_"+HoraMinutoSegundo+".png"));
     }

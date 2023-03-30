@@ -1,49 +1,37 @@
 import java.io.InputStream;
-import java.net.URI;
 import java.net.URL;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.net.http.HttpResponse.BodyHandlers;
 import java.util.List;
-import java.util.Map;
 
 public class App {
 
     public static void main(String[] args) throws Exception {
-        // System.out.println("Hello, World!");
-
+        
         String url = "https://raw.githubusercontent.com/alura-cursos/imersao-java-2-api/main/TopMovies.json";
-        URI endereco = URI.create(url);
-        var client = HttpClient.newHttpClient();
-        var request = HttpRequest
-            .newBuilder(endereco)
-            .GET()
-            .build();
-        HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
-        String body = response.body();
+        ExtratorDeConteudo extrator = new ExtratorDeConteudoDoImdb();
 
-        // System.out.println(body);
-        var parser = new JsonParser();
-        List<Map<String, String>> listaDeFilmes = parser.parse(body);
+        // String url = "https://raw.githubusercontent.com/alura-cursos/imersao-java-2-api/main/NASA-APOD.json";
+        // ExtratorDeConteudo extrator = new ExtratorDeConteudoDaNasa();
 
-        // System.out.println(listaDeFilmes.size());
-        Integer posicao = 1;
+        var http = new ClienteHttp();
+        String dadosJson = http.buscaDados(url);
+
+        List<Conteudo> conteudos = extrator.extrairConteudo(dadosJson);
 
         String estrela = "⭐";
 
-        for (Map<String,String> filme : listaDeFilmes) {
-            // System.out.println(posicao);
-            String imagemUrl = filme.get("image");
+        for(int i = 0; i < 3; i++){
+            Conteudo conteudo = conteudos.get(i);
+
+            String imagemUrl = conteudo.getUrlImagem();
+            String titulo = conteudo.getTitulo();
+
             InputStream inputStream = new URL(imagemUrl).openStream();
             var gerador = new GeradorDeSticker();
-            gerador.criar(inputStream,filme.get("title"));
+            gerador.criar(inputStream,titulo);
 
-            System.out.println("\u001b[34;1m \u001b[1m"+posicao+". "+filme.get("title")+"\u001b[m "+estrela+" "+filme.get("imDbRating"));
-            System.out.println("\u001b[3m "+filme.get("image")+"\u001b[m");
-            // System.out.println();
+            System.out.println("\u001b[34;1m \u001b[1m"+(i+1)+". "+titulo+"\u001b[m "+estrela+" 5 ");
+            System.out.println("\u001b[3m "+imagemUrl+"\u001b[m");
             System.out.println();
-            posicao++;
         }
 
     }
